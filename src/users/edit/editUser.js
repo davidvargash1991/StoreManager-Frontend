@@ -3,16 +3,28 @@ import { Row, Button, Form, FormGroup, Label,
     Input, Col, FormFeedback } from 'reactstrap';
 import { create, update } from '../../services/userService';
 import { withRouter } from 'react-router-dom';
+
 import Header from '../../home/header';
 
 class EditUser extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    let user = {
       firstname: '',
       lastname: '',
-      username: '',
+      username: ''
+    };
+
+    if (this.props.userId !== undefined) {
+      user = this.props.users.users.filter((user) => 
+              user.id === parseInt(this.props.userId,10))[0];
+    }
+    
+    this.state = {
+      firstname: user !== undefined ? user.firstName : '',
+      lastname: user !== undefined ? user.lastName : '',
+      username: user !== undefined ? user.username : '',
       password: '',
       confirmPassword: '',
       error: '',
@@ -121,7 +133,8 @@ class EditUser extends Component {
                                  this.state.confirmPassword);
     const isFormValid = errors.username === '' && errors.password === '' &&
                         errors.firstname === '' && errors.firstname === '' &&
-                        errors.confirmPassword === '';                                 
+                        errors.confirmPassword === ''; 
+                               
     return (
       <React.Fragment>
       <Header />        
@@ -181,32 +194,37 @@ class EditUser extends Component {
                   <FormFeedback>{errors.username}</FormFeedback>
                 </Col>
               </FormGroup>
-              <FormGroup>
-                <Label htmlFor="password">Password</Label>
-                <Col>
-                  <Input type="password" id="password" name="password"
-                         placeholder="Password"
-                         value={this.state.password}
-                         valid={errors.password === ''}
-                         invalid={errors.password !== ''}
-                         onBlur={this.handleBlur('password')}
-                         onChange={this.handleInputChange} />
-                  <FormFeedback>{errors.password}</FormFeedback>
-                </Col>
-              </FormGroup> 
-              <FormGroup>
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Col>
-                  <Input type="password" id="confirmPassword" name="confirmPassword"
-                         placeholder="Confirm Password"
-                         value={this.state.confirmPassword}
-                         valid={errors.confirmPassword === ''}
-                         invalid={errors.confirmPassword !== ''}
-                         onBlur={this.handleBlur('confirmPassword')}
-                         onChange={this.handleInputChange} />
-                  <FormFeedback>{errors.confirmPassword}</FormFeedback>
-                </Col>
-              </FormGroup>  
+              {
+                (this.props.userId === undefined) &&
+                  <React.Fragment>
+                  <FormGroup>
+                    <Label htmlFor="password">Password</Label>
+                    <Col>
+                      <Input type="password" id="password" name="password"
+                             placeholder="Password"
+                             value={this.state.password}
+                             valid={errors.password === ''}
+                             invalid={errors.password !== ''}
+                             onBlur={this.handleBlur('password')}
+                             onChange={this.handleInputChange} />
+                      <FormFeedback>{errors.password}</FormFeedback>
+                    </Col>
+                  </FormGroup> 
+                  <FormGroup>
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Col>
+                      <Input type="password" id="confirmPassword" name="confirmPassword"
+                             placeholder="Confirm Password"
+                             value={this.state.confirmPassword}
+                             valid={errors.confirmPassword === ''}
+                             invalid={errors.confirmPassword !== ''}
+                             onBlur={this.handleBlur('confirmPassword')}
+                             onChange={this.handleInputChange} />
+                      <FormFeedback>{errors.confirmPassword}</FormFeedback>
+                    </Col>
+                  </FormGroup> 
+                  </React.Fragment>                 
+              }
               <FormGroup row>
                 <Col md={10}>
                   <Button type="submit" color="primary" disabled={!isFormValid}>

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { getAll } from '../../services/userService';
 import { Link } from 'react-router-dom';
 import Header from '../../home/header';
+import { Loading } from '../../Utilities/components/loading';
 
 const editFormatter = (cell, row, rowIndex, formatExtraData) => { 
   const rowId = row.id;
@@ -41,56 +41,45 @@ export const userListColumns = [{
   }];
 
 class UserList extends Component {
-  constructor(props) {
-    super(props);    
-    this.state = {
-      users: [],
-    };
-  } 
-
-  componentDidMount(){
-    getAll().then(
-      users => {
-        this.setState({
-            users
-          });
-      },
-      error => {
-        this.setState({
-          loading: false,
-          error: error.message
-        });
-      }
-    );
-  }
-
   render() {
-    return(  
-      <React.Fragment>
-        <Header />
+    if (this.props.users.isLoading) {
+      return <Loading /> 
+    } else if (this.props.users.error) {
+      return (
         <div className="container">
           <div className="row">
-            <div className="col-12">
-              <h1>Users</h1>
+            <h4>{this.props.users.errMess}</h4>
+          </div>
+        </div>      
+      );
+    } else {
+      return(  
+        <React.Fragment>
+          <Header />
+          <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <h1>Users</h1>
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-12">
-              <BootstrapTable keyField='id' data={ this.state.users } 
-                bootstrap4 striped
-                columns={ userListColumns } />                  
+            <div className="row">
+              <div className="col-12">
+                <BootstrapTable keyField='id' data={ this.props.users.users } 
+                  bootstrap4 striped
+                  columns={ userListColumns } />                  
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-12">
-              <Link to="/editUser/false" type="button" className="btn btn-primary">
-              <span className="fa fa-plus fa-lg"></span> Add
-              </Link>
-            </div>        
-          </div>
-        </div>  
-      </React.Fragment>
-    );
+            <div className="row">
+              <div className="col-12">
+                <Link to="/editUser/false" type="button" className="btn btn-primary">
+                <span className="fa fa-plus fa-lg"></span> Add
+                </Link>
+              </div>        
+            </div>
+          </div>  
+        </React.Fragment>
+      );
+    }
   }
 }
 export default UserList;
