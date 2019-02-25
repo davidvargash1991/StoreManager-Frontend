@@ -23,7 +23,6 @@ class Login extends Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
   validate(username, password) {
@@ -85,7 +84,7 @@ class Login extends Component {
   render() {
     const errors = this.validate(this.state.username, this.state.password);
     const isFormValid = errors.username === '' && errors.password === '' &&
-                        this.state.touched.username && this.state.touched.password;
+                        this.state.touched.username && this.state.password.length >= 8;
     if (this.state.loading) {
       return (
         <div className="container">
@@ -108,7 +107,7 @@ class Login extends Component {
                     <h1>Login</h1>
                   </FormGroup>
                   <FormGroup>
-                    <Label htmlFor="firstname">User Name</Label>
+                    <Label htmlFor="username">User Name</Label>
                     <Col>
                       <Input type="text" id="username" name="username"
                              placeholder="User Name"
