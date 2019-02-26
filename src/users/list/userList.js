@@ -5,6 +5,7 @@ import Header from '../../home/header';
 import { Loading } from '../../Utilities/components/loading';
 import { connect } from 'react-redux';
 import { fetchUsers } from '../../redux/actionCreators/usersActionCreator';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 const editFormatter = (cell, row, rowIndex, formatExtraData) => { 
   const rowId = row.id;
@@ -72,7 +73,8 @@ class UserList extends Component {
               <div className="col-12">
                 <BootstrapTable keyField='id' data={ this.props.users.users } 
                   bootstrap4 striped
-                  columns={ userListColumns } />                  
+                  columns={ userListColumns }
+                  pagination={ paginationFactory()} />                  
               </div>
             </div>
             <div className="row">

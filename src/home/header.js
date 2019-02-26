@@ -68,8 +68,12 @@ class Header extends Component {
                     {user.username}
                   </DropdownToggle> 
                   <DropdownMenu>
-                    <DropdownItem><a href="/user/preferences"><i className="icon-cog"></i> Reset Password</a></DropdownItem>
-                    <DropdownItem onClick={this.logout}><i className="icon-off"></i> Logout</DropdownItem>
+                    <DropdownItem>
+                      <span className="fa fa-refresh fa-lg"></span> Reset Password
+                    </DropdownItem>
+                    <DropdownItem onClick={this.logout}>
+                      <span className="fa fa-sign-out fa-lg"></span> Logout
+                    </DropdownItem>
                   </DropdownMenu>                                 
                 </Dropdown>
               </Nav>              
