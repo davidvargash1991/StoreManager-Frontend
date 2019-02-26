@@ -16,15 +16,25 @@ export const loginRequest = (username,password) => (dispatch) => {
 }
 
 export const logingIn = () => ({
-    type: ActionTypes.LOGING_IN
-  });
+  type: ActionTypes.LOGING_IN
+});
   
-  export const loginSuccess = (user) => ({
-    type : ActionTypes.LOGIN_SUCCESS,
-    payload: user
-  });
+export const loginSuccess = (user) => ({
+  type : ActionTypes.LOGIN_SUCCESS,
+  payload: user
+});
   
-  export const loginFailed = (errmess) => ({
-    type: ActionTypes.LOGIN_FAILURE,
-    payload: errmess
-  });
+export const loginFailed = (errmess) => ({
+  type: ActionTypes.LOGIN_FAILURE,
+  payload: errmess
+});
+
+export const logoutRequest = () => (dispatch) => {
+  localStorage.removeItem('user');
+  dispatch(logut());
+  history.push('/login');  
+}
+
+export const logut = () => ({
+  type: ActionTypes.LOGOUT
+});

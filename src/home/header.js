@@ -4,12 +4,17 @@ import { Nav, Navbar, NavbarBrand, NavbarToggler,
      DropdownMenu, DropdownItem } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { logoutRequest } from '../redux/actionCreators/authActionCreator';
 
 const mapStateToProps = state => {
   return {
     auth: state.auth
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  logoutRequest: () => {dispatch(logoutRequest())}
+});
 
 class Header extends Component {
   constructor(props) {
@@ -21,6 +26,7 @@ class Header extends Component {
     };
     this.toggleNav = this.toggleNav.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   toggleNav() {
@@ -33,6 +39,10 @@ class Header extends Component {
     this.setState(prevState => ({
       isDropdownOpen: !prevState.isDropdownOpen
     }));
+  }
+
+  logout(event) {
+    this.props.logoutRequest();
   }
 
   render() {
@@ -59,7 +69,7 @@ class Header extends Component {
                   </DropdownToggle> 
                   <DropdownMenu>
                     <DropdownItem><a href="/user/preferences"><i className="icon-cog"></i> Reset Password</a></DropdownItem>
-                    <DropdownItem><a href="/auth/logout"><i className="icon-off"></i> Logout</a></DropdownItem>
+                    <DropdownItem onClick={this.logout}><i className="icon-off"></i> Logout</DropdownItem>
                   </DropdownMenu>                                 
                 </Dropdown>
               </Nav>              
@@ -69,4 +79,4 @@ class Header extends Component {
     );
   }
 }
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps,mapDispatchToProps)(Header);
