@@ -1,6 +1,6 @@
 import * as ActionTypes from '../actionTypes';
 
-export const users = (state = { users: [], isLoading: false, error: null}, action) => {
+export const users = (state = { users: [], isLoading: false, errMess: null}, action) => {
     switch(action.type){
         case ActionTypes.GET_USERS:
           return {...state, isLoading: false, errMess : null, users: action.payload};

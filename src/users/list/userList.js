@@ -3,6 +3,8 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 import Header from '../../home/header';
 import { Loading } from '../../Utilities/components/loading';
+import { connect } from 'react-redux';
+import { fetchUsers } from '../../redux/actionCreators/usersActionCreator';
 
 const editFormatter = (cell, row, rowIndex, formatExtraData) => { 
   const rowId = row.id;
@@ -41,10 +43,14 @@ export const userListColumns = [{
   }];
 
 class UserList extends Component {
+  componentDidMount(){
+    this.props.fetchUsers();
+  }
+    
   render() {
     if (this.props.users.isLoading) {
       return <Loading /> 
-    } else if (this.props.users.error) {
+    } else if (this.props.users.errMess) {
       return (
         <div className="container">
           <div className="row">
@@ -82,4 +88,15 @@ class UserList extends Component {
     }
   }
 }
-export default UserList;
+
+const mapStateToProps = state => {
+  return {
+    users: state.users
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchUsers: () => {dispatch(fetchUsers())}
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(UserList);

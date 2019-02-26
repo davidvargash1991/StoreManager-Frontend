@@ -3,7 +3,8 @@ import { Row, Button, Form, FormGroup, Label,
     Input, Col, FormFeedback } from 'reactstrap';
 import { create, update } from '../../services/userService';
 import { withRouter } from 'react-router-dom';
-
+import { history } from '../../Utilities/history';
+import { connect } from 'react-redux';
 import Header from '../../home/header';
 
 class EditUser extends Component {
@@ -71,7 +72,7 @@ class EditUser extends Component {
   }
 
   handleBack = () => {
-    this.props.history.goBack();
+    history.goBack();
   }
 
   handleBlur = (field) => (evt) => {
@@ -243,4 +244,11 @@ class EditUser extends Component {
     );
   }
 }
-export default withRouter(EditUser);
+
+const mapStateToProps = state => {
+  return {
+    users: state.users
+  }
+}
+
+export default withRouter(connect(mapStateToProps)(EditUser));

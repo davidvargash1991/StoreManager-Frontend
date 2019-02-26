@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label,
          Input, Col, FormFeedback } from 'reactstrap';
 import { Loading } from '../Utilities/components/loading';
-import { login } from '../services/userService';
 import { withRouter } from 'react-router-dom';
+import { loginRequest } from '../redux/actionCreators/authActionCreator';
+import { connect } from 'react-redux';
 import './login.css';
 
 class Login extends Component {
@@ -13,8 +14,6 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      loading: false,
-      error: '',
       touched: {
         username: false,
         password: false
@@ -44,8 +43,7 @@ class Login extends Component {
 
   handleBlur = (field) => (evt) => {
     this.setState({
-      touched: { ...this.state.touched, [field]: true },
-      error: ''
+      touched: { ...this.state.touched, [field]: true }
     });
   }
 
@@ -61,31 +59,14 @@ class Login extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({
-      loading: true,
-      error: ''
-    });
-    login(this.state.username,this.state.password).then(
-      user => {
-        this.setState({
-          loading: false
-        });
-        this.props.history.push('/');
-      },
-      error => {
-        this.setState({
-          loading: false,
-          error: error.message
-        });
-      }
-    );
+    this.props.loginRequest(this.state.username,this.state.password);
   }
 
-  render() {
+  render() {  
     const errors = this.validate(this.state.username, this.state.password);
     const isFormValid = errors.username === '' && errors.password === '' &&
                         this.state.touched.username && this.state.password.length >= 8;
-    if (this.state.loading) {
+    if (this.props.auth.isLoading) {
       return (
         <div className="container">
           <div className="row">
@@ -95,8 +76,7 @@ class Login extends Component {
           </div>
         </div>
       );
-    }
-    else {
+    } else {
       return(
         <section>
           <div className="container">
@@ -133,7 +113,7 @@ class Login extends Component {
                     </Col>
                   </FormGroup>
                   {
-                    (this.state.error) &&
+                    (this.props.auth.error) &&
                       <FormGroup>
                         <p class="text-danger">{this.state.error}</p>
                       </FormGroup>
@@ -155,4 +135,14 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  loginRequest: (username,password) => {dispatch(loginRequest(username,password))}
+});
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Login));
