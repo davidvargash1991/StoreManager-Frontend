@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { history } from '../../Utilities/history';
 import { connect } from 'react-redux';
 import Header from '../../home/header';
+import { charactersValidation } from '../../Utilities/constants/validation';
 
 class EditUser extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class EditUser extends Component {
       firstname: user !== undefined ? user.firstName : '',
       lastname: user !== undefined ? user.lastName : '',
       username: user !== undefined ? user.username : '',
+      iniUsername: user !== undefined ? user.username : '',
       password: '',
       confirmPassword: '',
       error: '',
@@ -53,6 +55,11 @@ class EditUser extends Component {
       confirmPassword: '',
     };
 
+    const validateUsernameTaken = (username,users) => {
+      return users.filter((user) => 
+        user.username.toLowerCase() === username.toLowerCase()).length > 0;
+    }
+
     if (this.state.touched.firstname && firstname.length < 3)
         errors.firstname = 'First Name should contain at least 3 characters';
 
@@ -60,11 +67,36 @@ class EditUser extends Component {
         errors.lastname = 'Last Name should contain at least 3 characters';
 
     if (this.state.touched.username && username.length < 5)
-        errors.username = 'user Name should contain at least 5 characters';
+        errors.username = 'User Name should contain at least 5 characters';
+
+    if (username !== this.state.iniUsername && 
+        validateUsernameTaken(username,this.props.users.users)) {
+      errors.username = 'User Name already taken';
+    } 
 
     if (this.state.touched.password && password.length < 8)
-        errors.password = 'Last Name should contain at least 8 characters';
- 
+        errors.password = 'Password should contain at least 8 characters';
+
+    if (this.state.touched.password && 
+        !charactersValidation.regUpper.test(password)) {
+          errors.password = 'Password should contain at least 1 Uppercase letter';
+    }       
+
+    if (this.state.touched.password && 
+        !charactersValidation.regLower.test(password)) {
+      errors.password = 'Password should contain at least 1 Lowercase letter';
+    }       
+
+    if (this.state.touched.password && 
+        !charactersValidation.regSpecialChar.test(password)) {
+      errors.password = 'Password should contain at least 1 Special character';
+    }       
+
+    if (this.state.touched.password && 
+        !charactersValidation.regNumber.test(password)) {
+      errors.password = 'Password should contain at least 1 Number';
+    } 
+
     if (this.state.touched.confirmPassword && confirmPassword !== password)
         errors.confirmPassword = 'The passwords don\'t match';
         

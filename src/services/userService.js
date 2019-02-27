@@ -1,5 +1,6 @@
 import { api } from '../Utilities/constants/api';
 import { authHeader } from '../Utilities/auth/auth-header';
+import { history } from '../Utilities/history';
 
 export function getAll() {
   const requestOptions = {
@@ -62,6 +63,7 @@ function handleResponse(response) {
 
       if (response.status === 401){
         localStorage.removeItem('user');
+        history.push('/login');
       }
 
       error.response = response;
