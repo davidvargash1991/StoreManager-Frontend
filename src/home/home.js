@@ -32,14 +32,14 @@ function Home() {
             <Card className="text-white bg-success mb-3">
               <CardBody>
                 <Row align="center">
-                  <Link  to="/usersAdmin">
+                  <Link  to="/itemsAdmin">
                     <img width="64" height="64" 
                          src={process.env.PUBLIC_URL +'/images/box.png'} 
                          alt="Menu" />
                   </Link>
                 </Row>
                 <Row align="center">
-                  <Link className="text-white" to="/usersAdmin"><h3>Items</h3></Link>         
+                  <Link className="text-white" to="/itemsAdmin"><h3>Items</h3></Link>         
                 </Row>
               </CardBody>              
             </Card>         
@@ -55,7 +55,7 @@ function Home() {
                   </Link>
                 </Row>
                 <Row align="center">
-                  <Link className="text-white" to="/usersAdmin"><h3>Stores</h3></Link>         
+                  <Link className="text-white" to="/usersAdmin"><h3>Stores &amp; Warehouses</h3></Link>         
                 </Row>
               </CardBody>              
             </Card>         

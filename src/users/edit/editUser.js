@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Row, Button, Form, FormGroup, Label,
     Input, Col, FormFeedback } from 'reactstrap';
 import { create, update } from '../../services/userService';
-import { withRouter } from 'react-router-dom';
 import { history } from '../../Utilities/history';
 import { connect } from 'react-redux';
 import Header from '../../home/header';
 import { charactersValidation } from '../../Utilities/constants/validation';
+import { Link } from 'react-router-dom';
 
 class EditUser extends Component {
   constructor(props) {
@@ -42,7 +42,6 @@ class EditUser extends Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleBack = this.handleBack.bind(this);
   }
 
   validate(firstname, lastname, username, password, confirmPassword) {
@@ -103,10 +102,6 @@ class EditUser extends Component {
     return errors;
   }
 
-  handleBack = () => {
-    history.goBack();
-  }
-
   handleBlur = (field) => (evt) => {
     this.setState({
       touched: { ...this.state.touched, [field]: true },
@@ -138,7 +133,7 @@ class EditUser extends Component {
     if (this.props.edit === 'true') {
       update(user).then(
         () => {
-          this.props.history.goBack();
+          history.goBack();
         },
         error => {
           this.setState({
@@ -149,7 +144,7 @@ class EditUser extends Component {
     } else {
       create(user).then(
         () => {
-          this.props.history.goBack();
+          history.goBack();
         },
         error => {
           this.setState({
@@ -263,9 +258,9 @@ class EditUser extends Component {
                   <Button type="submit" color="primary" disabled={!isFormValid}>
                     <span className="fa fa-cloud fa-lg"></span> Save
                   </Button>
-                  <Button type="button" color="primary" onClick={this.handleBack}>
+                  <Link to="/usersAdmin" type="button" className="btn btn-primary">
                     <span className="fa fa-arrow-left fa-lg"></span> Go Back
-                  </Button>                  
+                  </Link>                          
                 </Col>
               </FormGroup>                                                    
             </Form>
@@ -283,4 +278,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(EditUser));
+export default connect(mapStateToProps)(EditUser);

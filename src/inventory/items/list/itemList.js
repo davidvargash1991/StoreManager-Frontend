@@ -1,40 +1,30 @@
 import React, { Component } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import { Link } from 'react-router-dom';
-import Header from '../../home/header';
-import { Loading } from '../../Utilities/components/loading';
 import { connect } from 'react-redux';
-import { fetchUsers } from '../../redux/actionCreators/usersActionCreator';
+import { fetchItems } from '../../../redux/actionCreators/itemsActionCreator';
+import { Loading } from '../../../Utilities/components/loading';
+import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import { Link } from 'react-router-dom';
+import Header from '../../../home/header';
 
 const editFormatter = (cell, row, rowIndex, formatExtraData) => { 
   const rowId = row.id;
   return (     
-    <Link to={`/editUser/true/${rowId}`}> 
+    <Link to={`/editItem/true/${rowId}`}> 
       <span className="fa fa-edit fa-lg"></span>
     </Link> 
   ); 
 }
 
-export const userListColumns = [{
-    dataField: 'username',
-    text: 'User name',
+export const itemListColumns = [{
+    dataField: 'name',
+    text: 'Name',
     sort: true
   }, {
-    dataField: 'firstName',
-    text: 'First Name',
+    dataField: 'price',
+    text: 'Price',
     sort: true
-  }, {
-    dataField: 'lastName',
-    text: 'Last Name',
-    sort: true
-  },{
-    dataField: 'active',
-    text: 'Active'
-  },{
-    dataField: 'locked',
-    text: 'Locked'
-  },{ 
+  }, { 
     dataField: 'edit', 
     text: '', 
     editable: false, 
@@ -43,43 +33,43 @@ export const userListColumns = [{
     formatter: editFormatter 
   }];
 
-class UserList extends Component {
+class ItemList extends Component {
   componentDidMount(){
-    this.props.fetchUsers();
+    this.props.fetchItems();
   }
-    
-  render() {
-    if (this.props.users.isLoading) {
+
+  render () {
+    if (this.props.items.isLoading) {
       return <Loading /> 
-    } else if (this.props.users.errMess) {
+    } else if (this.props.items.errMess) {
       return (
         <div className="container">
           <div className="row">
-            <h4>{this.props.users.errMess}</h4>
+            <h4>{this.props.items.errMess}</h4>
           </div>
         </div>      
       );
     } else {
-      return(  
+      return (
         <React.Fragment>
           <Header />
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h1>Users</h1>
+                <h1>Items</h1>
               </div>
             </div>
             <div className="row">
               <div className="col-12">
-                <BootstrapTable keyField='id' data={ this.props.users.users } 
+                <BootstrapTable keyField='id' data={ this.props.items.items } 
                   bootstrap4 striped
-                  columns={ userListColumns }
+                  columns={ itemListColumns }
                   pagination={ paginationFactory()} />                  
               </div>
             </div>
             <div className="row">
               <div className="col-12">
-                <Link to="/editUser/false" type="button" className="btn btn-primary">
+                <Link to="/editItem/false" type="button" className="btn btn-primary">
                 <span className="fa fa-plus fa-lg"></span> Add
                 </Link>
                 <Link to="/" type="button" className="btn btn-primary">
@@ -88,7 +78,7 @@ class UserList extends Component {
               </div>        
             </div>
           </div>  
-        </React.Fragment>
+        </React.Fragment>        
       );
     }
   }
@@ -96,12 +86,12 @@ class UserList extends Component {
 
 const mapStateToProps = state => {
   return {
-    users: state.users
+    items: state.items
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchUsers: () => {dispatch(fetchUsers())}
+  fetchItems: () => {dispatch(fetchItems())}
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(UserList);
+export default connect(mapStateToProps,mapDispatchToProps)(ItemList);
