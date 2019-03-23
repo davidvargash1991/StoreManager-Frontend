@@ -31,19 +31,18 @@ export const itemsFailed = (errmess) => ({
 });
 
 export const postItem = (item) => (dispatch) => {
-
-  client.query({
-    query: gql`
-      mutation {
-        createItem(item: {
-          name: "${item.name}",
-          price: ${item.price},
-          tax: ${item.tax}
-        }) {
-          id,
-          name
-        }
-      }`,
+  client.mutate({
+    mutation: gql`
+    mutation {
+      createItem(item: {
+        name: "${item.name}",
+        price: ${item.price},
+        tax: ${item.tax}
+      }) {
+        id,
+        name
+      }
+    }`,
   })
   .then(data => dispatch(editItem(data.data.item)))
   .catch(error => dispatch(editItemFailed(error)));   
