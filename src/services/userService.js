@@ -59,15 +59,12 @@ function handleResponse(response) {
         resolve();
       }
     } else {
-      var error = new Error('Error ' + response.status + ':' + response.statusText);
-
       if (response.status === 401){
         localStorage.removeItem('user');
         history.push('/login');
       }
 
-      error.response = response;
-      reject(error && error.message);
+      response.text().then(text => reject(text));
     }
   });
 }

@@ -35,7 +35,7 @@ class Login extends Component {
         errors.username = 'user Name should contain at least 5 characters';
 
     if (this.state.touched.password && password.length < 8)
-        errors.password = 'Last Name should contain at least 8 characters';
+        errors.password = 'Password should contain at least 8 characters';
 
     return errors;
   }
@@ -113,9 +113,9 @@ class Login extends Component {
                     </Col>
                   </FormGroup>
                   {
-                    (this.props.auth.error) &&
+                    (this.props.auth.errMess) &&
                       <FormGroup>
-                        <p class="text-danger">{this.state.error}</p>
+                        <p className="text-danger">{this.props.auth.errMess}</p>
                       </FormGroup>
                   }
                   <FormGroup row>

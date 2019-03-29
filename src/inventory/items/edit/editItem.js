@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Row, Button, Form, FormGroup, Label,
     Input, Col, FormFeedback } from 'reactstrap';
 //import { history } from '../../Utilities/history';
+import NumericInput from 'react-numeric-input';
 import Header from '../../../home/header';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -38,20 +39,29 @@ class EditItem extends Component {
     if (this.state.touched.name && (name.length < 2 || name.length > 100))
         errors.name = 'Name should be between 2 and 100 characters';
         
-    if (this.state.touched.price && (price === "" || price === "0"))
+    if (this.state.touched.price && (price === "" || price === "0.00"))
         errors.price = 'Price should be grater than 0';
 
-    if (this.state.touched.tax && (tax === "" || tax === "0"))
-        errors.price = 'Price should be grater than 0';
+    if (this.state.touched.tax && (tax === "" || tax === "0.00"))
+        errors.tax = 'Price should be grater than 0';
 
     return errors;
   }
 
   handleBlur = (field) => (evt) => {
-    this.setState({
-      touched: { ...this.state.touched, [field]: true },
-      error: ''
-    });
+    if (field === 'price' || field === 'tax') {
+      const name = field;
+      this.setState({
+        touched: { ...this.state.touched, [field]: true },
+        error: '',
+        [name]: evt.target.value
+      });      
+    } else {
+      this.setState({
+        touched: { ...this.state.touched, [field]: true },
+        error: ''
+      });
+    }
   }
 
   handleInputChange(event) {
@@ -116,26 +126,26 @@ class EditItem extends Component {
                 <FormGroup>
                   <Label htmlFor="price">Price</Label>
                   <Col>
-                    <Input type="number" id="price" name="price"
-                         placeholder="Price"
-                         value={this.state.price}
+                    <NumericInput id="price" name="price"
+                         placeholder="Price" className="form-control"
+                         step={0.01}
+                         precision={2}
+                         value={0}
                          valid={errors.price === ''}
-                         invalid={errors.price !== ''}
-                         onBlur={this.handleBlur('price')}
-                         onChange={this.handleInputChange} />
-                    <FormFeedback>{errors.price}</FormFeedback>
+                         invalid={errors.price !== ''}                         
+                         onBlur={this.handleBlur('price')} />
+                         <FormFeedback>{errors.price}</FormFeedback>
                   </Col>
                 </FormGroup>  
                 <FormGroup>
                   <Label htmlFor="tax">Tax</Label>
                   <Col>
-                    <Input type="number" id="tax" name="tax"
-                         placeholder="Tax"
-                         value={this.state.tax}
-                         valid={errors.tax === ''}
-                         invalid={errors.tax !== ''}
-                         onBlur={this.handleBlur('tax')}
-                         onChange={this.handleInputChange} />
+                  <NumericInput id="tax" name="tax"
+                         placeholder="Tax" className="form-control"
+                         step={0.01}
+                         precision={2}
+                         value={0}
+                         onBlur={this.handleBlur('tax')} />                  
                     <FormFeedback>{errors.tax}</FormFeedback>
                   </Col>
                 </FormGroup>                 
